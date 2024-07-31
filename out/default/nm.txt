@@ -1,0 +1,45 @@
+a.out:
+00000000 d 
+00000000 d 
+00000000 t 
+00000014 b 
+00000056 b 
+00000135 T .cret
+0000013a T .dret
+00000133 T .dsret
+00000139 T .sdret
+00000134 T .sret
+00000003 a BOTH
+00000126 t L0
+00000002 a RECEIVE
+00000001 a SEND
+00000020 a SYSVEC
+00000090 T ___exit
+0000000c D ___funcc
+00000016 B ___funct
+00000051 t __calls
+0000000e D __clean
+00000014 D __edata
+00000056 B __end
+0000013d T __etext
+00000088 T __exit
+00000002 D __penvir
+00000014 B __penvp
+0000011c T __receiv
+00000117 T __send
+00000121 T __sendre
+000000dd T __syscal
+000000b0 T __write
+00000010 D _environ
+00000012 D _errno
+0000006b T _exit
+00000039 T _main
+0000008c T _write
+00000014 B begbss
+00000000 D begdata
+00000000 T begtext
+00000000 T crtso
+00000056 B endbss
+00000014 D enddata
+00000000 D endrom
+0000013d T endtext

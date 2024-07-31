@@ -1,0 +1,21 @@
+[package]
+name = "minix_vm"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[profile.dev]
+vm = { version = "0.11.1", optional = true }
+debug = true  # デバッグ情報を出力するかどうか。
+
+[dependencies]
+libc = "0.2"
+
+
+[features]
+big_endian = []
+little_endian = []
+debug = []
+dasm = []
+vm = []

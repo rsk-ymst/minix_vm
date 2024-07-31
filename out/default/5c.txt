@@ -1,0 +1,4 @@
+argv[0]=5c
+argv[1]=hoge
+argv[2]=fuga
+argv[3]=piyo
