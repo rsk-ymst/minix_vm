@@ -1,6 +1,6 @@
 use std::{
     fs::File,
-    io::{self, BufRead, BufReader, Read},
+    io::{self, BufRead, BufReader},
     path::Path,
     process::Command,
 };
@@ -44,16 +44,6 @@ fn dasm_7() {
 fn dasm_nm() {
     exec_case("nm");
 }
-
-// #[test]
-// fn dasm_08() {
-//     exec_case(8);
-// }
-
-// #[test]
-// fn dasm_09() {
-//     exec_case(9);
-// }
 
 #[test]
 fn vm_1() {
@@ -130,19 +120,10 @@ fn default_7() {
     exec_default_case("7c");
 }
 
-// fn default_7() {
-//     exec_default_case("7c");
-// }
-
 #[test]
 fn default_nm() {
     exec_default_case("nm");
 }
-
-// #[test]
-// fn vm_8() {
-//     exec_vm_case(8);
-// }
 
 fn exec_case(filename: &str) {
     exec_disassembler(filename);
