@@ -39,9 +39,6 @@ pub mod opcode {
 
     // Interruption
     pub const INT_TYPE_SPECIFIED: isize = 0b11001101;
-    pub const INT_TYPE_3: isize = 0b11001100;
-
-    pub const IMMEDIATE_RM: isize = 0b100000;
 
     // 汎用系
     pub const IMMEDIATE_WITH_REGISTER_MEMORY_6BIT: isize = 0b100000;

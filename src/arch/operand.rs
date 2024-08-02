@@ -1,4 +1,4 @@
-use super::reg::{Register};
+use super::reg::Register;
 use std::fmt::Debug;
 
 #[derive(PartialEq, Clone)]
@@ -26,13 +26,11 @@ struct Memory {
     displacement: i32,
 }
 
-// Someでラップするとトレイトで上手く表示できないため、便宜上Nullを追加
 #[derive(PartialEq, Clone, Copy)]
 pub enum ImmediateValue {
     I8(i8, usize),
     I16(i16, usize),
     I32(i32, usize),
-    Null,
 }
 
 impl Debug for ImmediateValue {
@@ -52,7 +50,6 @@ impl Debug for ImmediateValue {
                 (_, _) => write!(f, "{i:01x}"),
             },
             Self::I32(i, _) => write!(f, "{i:04x}"),
-            Self::Null => write!(f, ""),
         }
     }
 }
@@ -63,7 +60,6 @@ impl Into<u16> for ImmediateValue {
             Self::I8(val, _) => val as u16,
             Self::I16(val, _) => val as u16,
             Self::I32(val, _) => val as u16,
-            Self::Null => todo!(),
         }
     }
 }
@@ -74,13 +70,9 @@ impl Into<i16> for ImmediateValue {
             Self::I8(val, _) => val as i16,
             Self::I16(val, _) => val as i16,
             Self::I32(val, _) => val as i16,
-            Self::Null => todo!(),
         }
     }
 }
-
-// Effective Address
-// 型を用意してあげたほうがよいかも。
 
 #[derive(PartialEq, Clone)]
 pub struct Disp(pub isize);

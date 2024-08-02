@@ -1,8 +1,7 @@
 use arch::vm::VM;
 use std::env;
 use std::fs::File;
-use std::io::{self, BufRead, BufReader, Read};
-use std::path::Path;
+use std::io::{self, BufReader, Read};
 
 mod arch;
 pub mod test;
@@ -62,14 +61,10 @@ fn main() -> io::Result<()> {
 }
 
 fn read_file_content(path: &str) -> io::Result<Vec<u8>> {
-    let mut file = File::open(path)?;
+    let file = File::open(path)?;
 
     let mut buf = Vec::new();
-    let x = BufReader::new(file).read_to_end(&mut buf)?;
+    BufReader::new(file).read_to_end(&mut buf)?;
 
     Ok(buf)
-}
-
-fn get_filename_from_path(path: &str) -> Option<&str> {
-    Path::new(path).file_name()?.to_str()
 }

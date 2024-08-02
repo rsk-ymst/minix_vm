@@ -1,4 +1,4 @@
-use libc::{O_RDWR};
+use libc::O_RDWR;
 
 use crate::VM_MODE;
 
@@ -73,7 +73,6 @@ impl Ram {
     }
 
     pub fn write_i8(&mut self, addr: u16, value: i8) {
-        // self.data[addr as usize] = value as u8;
         let base = (self.data_base as usize + addr as usize) as usize;
         self.cells[base as usize] = value as u8;
     }
@@ -183,12 +182,8 @@ impl VM {
         let data_size = bm.get_data_size();
         let bss_size = bm.get_bss_size();
 
-        // println!("header: {}, text: {}, data: {:04x}, bss: {}", header_size, text_size, data_size, bss_size);
-
         let data_base_ptr = header_size + text_size;
         let bss_base_ptr = data_base_ptr + data_size;
-
-        // let x = bm.disassemble().unwrap();
 
         let text = &bytes[header_size..header_size + text_size];
         let data = &bytes[data_base_ptr..data_base_ptr + data_size];
@@ -481,7 +476,6 @@ impl VM {
 
                 val
             }
-            // Some(Operand::Special(sp)) => *sp as u16,
             _ => 0,
         }
     }
@@ -493,13 +487,6 @@ impl VM {
         opcode: &Opcode,
         mut value: u16,
     ) {
-        //  match src_operand {
-        //         Some(Operand::Register(Register::Reg8(_))) => {
-        //             value = value & 0xff;
-        //         }
-        //         _ => (),
-        // };
-
         match dst_operand {
             Some(Operand::Register(reg)) => match reg {
                 Register::Reg16(r16) => {
@@ -545,10 +532,7 @@ impl VM {
             | Opcode::MovImmediateRegisterMemoryWord
             | Opcode::MovImmediateRegisterMemoryByte
             | Opcode::MovMemoryToAccumulator
-            | Opcode::MovImmediate => {
-                // print!(" ==> {}", src);
-                src
-            }
+            | Opcode::MovImmediate => src,
             Opcode::PushRegMem => {
                 self.push(dst);
                 0
@@ -557,7 +541,6 @@ impl VM {
                 self.push(dst);
                 0
             }
-
             Opcode::PushSegReg => todo!(),
             Opcode::PopRegMem => todo!(),
             Opcode::PopReg => {
@@ -609,25 +592,15 @@ impl VM {
 
                 result
             }
-
             Opcode::OrRegEither
             | Opcode::OrImmediateRegisterMemory
             | Opcode::OrImmediateFromAccumulator => dst | src,
-
             Opcode::SubRegEither
             | Opcode::SubImmediateRegisterMemory
             | Opcode::SubImmediateFromAccumulator => {
                 let result = (dst as i16 - src as i16) as i16;
 
-                // if src >> 15 & 1 == 1 {
-                //     let result =  dst as i16 + src as i16;
-                //     self.set_flag(Flag::ZF, result == 0);
-                //     self.set_flag(Flag::SF, result >> 15 & 1 == 1);
-                //     return result as u16;
-                // }
-
                 self.set_flag(Flag::CF, dst < src);
-                // self.set_flag(Flag::CF, (dst as usize - src as usize) > u16::MAX as usize);
                 self.set_flag(Flag::ZF, result == 0);
                 self.set_flag(Flag::SF, result >> 15 & 1 == 1);
 
@@ -650,16 +623,11 @@ impl VM {
             Opcode::AndRegEither
             | Opcode::AndImmediateRegisterMemory
             | Opcode::AndImmediateFromAccumulator => {
-                // ｾﾞｯﾀｲﾆCF0にするマン
                 self.set_flag(Flag::CF, false);
                 dst & src
             }
-            Opcode::MovRmToFromReg => {
-                // print!("***> {}", src);
-                src
-            }
+            Opcode::MovRmToFromReg => src,
             Opcode::XorRegEither => {
-                // ｾﾞｯﾀｲﾆCF0にするマン
                 self.set_flag(Flag::CF, false);
                 dst ^ src
             }
@@ -679,7 +647,6 @@ impl VM {
                 self.jmp(dst);
                 0
             }
-            // Opcode::Rep => {
             Opcode::RepScasb => {
                 let al_val = self.get_reg8(Reg8::AL);
 
@@ -822,17 +789,9 @@ impl VM {
                 let last_into_cf = (dst >> src - 1) & 1;
                 self.set_flag(Flag::CF, last_into_cf == 1);
 
-                // self.set_flag(Flag::CF, dst & 1 != result & 1);
-
                 result
             }
-            Opcode::Rol => todo!(),
-            Opcode::Ror => todo!(),
-            Opcode::Rcl => todo!(),
-            Opcode::Rcr => todo!(),
             Opcode::Neg => !dst + 1,
-            Opcode::Not => todo!(),
-
             Opcode::RetWithinSegAddingImmedToSp
             | Opcode::RetIntersegment
             | Opcode::RetIntersegmentAddingImmediateToSp
@@ -925,31 +884,10 @@ impl VM {
                 }
                 dst
             }
-            Opcode::Jnp => todo!(),
-            Opcode::Jno => todo!(),
-            Opcode::Jns => todo!(),
-            Opcode::Loop => todo!(),
-            Opcode::Loopz => todo!(),
-            Opcode::Loopnz => todo!(),
-            Opcode::Jcxz => todo!(),
-            Opcode::Clc => todo!(),
-            Opcode::Cmc => todo!(),
-            Opcode::Stc => todo!(),
             Opcode::Cld => {
                 self.set_flag(Flag::DF, false);
                 0
             }
-            Opcode::Std => todo!(),
-            Opcode::Cli => todo!(),
-            Opcode::Sti => todo!(),
-            Opcode::Hlt => todo!(),
-            Opcode::Wait => todo!(),
-            Opcode::Esc => todo!(),
-            Opcode::Lock => todo!(),
-            Opcode::InFixedPort => todo!(),
-            Opcode::InVariablePort => todo!(),
-            Opcode::OutFixedPort => todo!(),
-            Opcode::OutVariablePort => todo!(),
             Opcode::Cbw => {
                 let al = self.get_reg8(Reg8::AL);
                 let sign = al >> 7 & 1;
@@ -976,7 +914,6 @@ impl VM {
                     self.set_reg16(Reg16::DX, 0);
                     self.set_reg16(Reg16::AX, res);
 
-                    // self.set_flag(Flag::SF, res >> 15 & 1 == 1);
                     self.set_flag(Flag::CF, (res >> 15 & 1) != (dst >> 15 & 1));
 
                     res
@@ -1009,11 +946,7 @@ impl VM {
                 result
             }
             Opcode::Undefined => 0,
-            Opcode::NOP => todo!(),
-            Opcode::CompsWord => todo!(),
-            Opcode::Rep => todo!(),
-            Opcode::RepMovsw => todo!(),
-            Opcode::RepScasb => todo!(),
+            _ => 0,
         }
     }
 

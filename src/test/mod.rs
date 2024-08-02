@@ -1,6 +1,7 @@
 use std::{
     fs::File,
     io::{self, BufRead, BufReader, Read},
+    path::Path,
     process::Command,
 };
 
@@ -232,4 +233,8 @@ fn compare_lines(file1: &str, file2: &str) -> io::Result<()> {
     }
 
     Ok(())
+}
+
+fn get_filename_from_path(path: &str) -> Option<&str> {
+    Path::new(path).file_name()?.to_str()
 }

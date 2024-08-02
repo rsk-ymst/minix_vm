@@ -1,86 +1,60 @@
-use super::constant;
 use std::fmt::Debug;
 
 #[derive(PartialEq, Clone, Copy)]
 pub enum Opcode {
-    // Mov
     MovImmediateRegisterMemory,
     MovImmediateRegisterMemoryWord,
     MovImmediateRegisterMemoryByte,
     MovImmediate,
     MovMemoryToAccumulator,
-
-    // Push
     PushRegMem,
     PushReg,
     PushSegReg,
-
-    // Pop
     PopRegMem,
     PopReg,
     PopSegReg,
-
-    // Xchg
     XchgRegisterMemoryWithRegister,
     XchgRegisterWithAccumulator,
-
-    // Int
     IntTypeSpecified,
-
-    // Add
     AddRegEither,
     AddImmediateRegisterMemory,
     AddImmediateFromAccumulator,
     AddImmediateToAccumulator,
-
     OrRegEither,
     OrImmediateRegisterMemory,
     OrImmediateFromAccumulator,
-
     SubRegEither,
     SubImmediateRegisterMemory,
     SubImmediateFromAccumulator,
-
     AdcRegEither,
     AdcImmediateRegisterMemory,
     AdcImmediateFromAccumulator,
-
     SsbRegEither,
     SsbImmediateRegisterMemory,
     SsbImmediateFromAccumulator,
-
     AndRegEither,
     AndImmediateRegisterMemory,
     AndImmediateFromAccumulator,
-
     MovRmToFromReg,
     XorRegEither,
-
     TestRegisterMemoryAndRegister,
     TestImmediate,
     TestImmediateByte,
     TestImmediateDataAndAccumulator,
-
     CallWithinDirect,
-
     Rep,
     CompsByte,
     CompsWord,
-
-    // cmp
     CmpImmediateWord,
     CmpImmediateByte,
     CmpRegEither,
     CmpImmediateFromAccumulator,
-
     Lea,
     Lds,
     Les,
-
     JmpDirectWithinSegment,
     JmpDirectWithinSegmentShort,
     JmpIndirectWithinSegment,
-
     Shl,
     Shr,
     Sar,
@@ -88,15 +62,12 @@ pub enum Opcode {
     Ror,
     Rcl,
     Rcr,
-
     Neg,
     Not,
-
     RetWithinSegment,
     RetWithinSegAddingImmedToSp,
     RetIntersegment,
     RetIntersegmentAddingImmediateToSp,
-
     Je,
     Jl,
     Jle,
@@ -113,12 +84,10 @@ pub enum Opcode {
     Jnp,
     Jno,
     Jns,
-
     Loop,
     Loopz,
     Loopnz,
     Jcxz,
-
     Clc,
     Cmc,
     Stc,
@@ -130,30 +99,22 @@ pub enum Opcode {
     Wait,
     Esc,
     Lock,
-
     InFixedPort,
     InVariablePort,
-
     OutFixedPort,
     OutVariablePort,
-
     Cbw,
     Cwd,
-
     IncRegisterMemory,
     IncRegister,
-
     DecRegisterMemory,
     DecRegister,
-
     Mul,
     Imul,
     Div,
     Idiv,
-
     Undefined,
     NOP,
-
     RepMovsw,
     RepMovsb,
     RepStosb,
@@ -356,11 +317,9 @@ impl Debug for Opcode {
             Opcode::JmpDirectWithinSegmentShort => write!(f, "jmp short"),
             Opcode::IncRegisterMemory | Opcode::IncRegister => write!(f, "inc"),
             Opcode::DecRegisterMemory | Opcode::DecRegister => write!(f, "dec"),
-
             Opcode::RetWithinSegment
             | Opcode::RetIntersegmentAddingImmediateToSp
             | Opcode::RetWithinSegAddingImmedToSp => write!(f, "ret"),
-
             Opcode::Je => write!(f, "je"),
             Opcode::Jl => write!(f, "jl"),
             Opcode::Jle => write!(f, "jle"),
@@ -377,19 +336,15 @@ impl Debug for Opcode {
             Opcode::Jnp => write!(f, "jnp"),
             Opcode::Jno => write!(f, "jno"),
             Opcode::Jns => write!(f, "jns"),
-
             Opcode::Loop => write!(f, "loop"),
             Opcode::Loopz => write!(f, "loopz"),
             Opcode::Loopnz => write!(f, "loopnz"),
             Opcode::Jcxz => write!(f, "jcxz"),
-
             Opcode::RepMovsb => write!(f, "rep movsb"),
             Opcode::RepMovsw => write!(f, "rep movsw"),
             Opcode::RepScasb => write!(f, "rep scasb"),
             Opcode::RepStosb => write!(f, "rep stosb"),
-
             Opcode::CompsByte => write!(f, "cmpsb"),
-
             Opcode::Lea => write!(f, "lea"),
             Opcode::Lds => write!(f, "lds"),
             Opcode::Les => write!(f, "les"),
@@ -402,7 +357,6 @@ impl Debug for Opcode {
             Opcode::Sti => write!(f, "sti"),
             Opcode::Cbw => write!(f, "cbw"),
             Opcode::Cwd => write!(f, "cwd"),
-
             Opcode::Shl => write!(f, "shl"),
             Opcode::Shr => write!(f, "shr"),
             Opcode::Sar => write!(f, "sar"),
@@ -410,13 +364,10 @@ impl Debug for Opcode {
             Opcode::Ror => write!(f, "ror"),
             Opcode::Rcl => write!(f, "rcl"),
             Opcode::Rcr => write!(f, "rcr"),
-
             Opcode::TestRegisterMemoryAndRegister
             | Opcode::TestImmediate
             | Opcode::TestImmediateDataAndAccumulator => write!(f, "test"),
-
             Opcode::TestImmediateByte => write!(f, "test byte"),
-
             Opcode::InFixedPort | Opcode::InVariablePort => write!(f, "in"),
             Opcode::OutFixedPort | Opcode::OutVariablePort => write!(f, "out"),
             Opcode::Undefined => write!(f, "(undefined)"),

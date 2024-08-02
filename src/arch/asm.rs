@@ -1,8 +1,6 @@
-use std::fmt::Debug;
-
-use crate::VM_MODE;
-
 use super::{opcode::Opcode, operand::Operand};
+use crate::VM_MODE;
+use std::fmt::Debug;
 
 #[derive(Clone)]
 pub struct Assembly {
@@ -105,16 +103,6 @@ impl Debug for Instruction {
                 None => write!(f, "{:?} {:?}", self.opcode, operand1),
             },
             None => write!(f, "{:?}", self.opcode),
-        }
-    }
-}
-
-impl Instruction {
-    pub fn new(opcode: Opcode, operand1: Option<Operand>, operand2: Option<Operand>) -> Self {
-        Self {
-            opcode,
-            operand1,
-            operand2,
         }
     }
 }

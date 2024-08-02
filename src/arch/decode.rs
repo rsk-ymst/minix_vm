@@ -403,15 +403,10 @@ impl VM {
 
         return self.undefined();
     }
-
-    // pub fn get_asm(&self) -> Vec<Assembly> {
-    //     self.asm.clone()
-    // }
 }
 
 pub trait TextParser {
     fn memory_to_register(&mut self, opcode: Opcode) -> Option<Assembly>;
-    // immediate register
     fn immediate_register(&mut self) -> Option<Assembly>;
 
     fn int_specified(&mut self) -> Option<Assembly>;
@@ -626,8 +621,6 @@ impl TextParser for VM {
 
             code = (code as usize) << 8 | third_byte as usize;
             code = (code as usize) << 8 | disp as usize;
-            // println!("**** {:04x} {:0x}", address, code);
-            // println!("bin: {:04x} {:064b}", address, code);
 
             let data = (third_byte as u16) << 8 | (disp as u16);
 
@@ -637,19 +630,13 @@ impl TextParser for VM {
 
             let immediate_value_first = self.consume_u8()?;
             size += 1;
-            // println!("bin: {:04x} {:064b}", address, code<<8);
-            // println!("bin: {:04x} {:064b}", address, immediate_value_first as usize);
             code = code << 8 | immediate_value_first as usize;
-            // println!("**** {:04x} {:0x}", address, code);
-            // println!("bin: {:04x} {:064b}", address, code);
 
             let operand2 = if w == 1 && opcode == Opcode::MovImmediateRegisterMemory {
                 let immediate_value_second = self.consume_u8()? as i8;
                 let immediate_value: i16 =
                     (immediate_value_second as i16) << 8 | immediate_value_first as i16;
 
-                // println!("**** {:04x} {:0x}", address, code);
-                // println!("bin: {:04x} {:064b}", address, code);
                 size += 1;
                 code = (code as usize) << 8 | immediate_value_second as usize;
 
@@ -663,7 +650,6 @@ impl TextParser for VM {
                 operand1: Some(Operand::EffectiveAddress(ea)),
                 operand2,
             };
-            // println!("**** {:04x} {:0x}", address, code);
 
             let asm = Assembly {
                 address,
@@ -732,8 +718,7 @@ impl TextParser for VM {
                 let forth_byte = self.consume_u8()?;
                 size += 2;
 
-                let value = ((forth_byte as i16) << 8) | third_byte as i16; // 即値はリトルエンディアンなので入れ替える
-                                                                            // println!("{:4x} {:0x}", address, code);
+                let value = ((forth_byte as i16) << 8) | third_byte as i16;
 
                 code = (code << 8) | third_byte as usize;
                 code = (code << 8) | forth_byte as usize;
@@ -746,26 +731,20 @@ impl TextParser for VM {
 
                 let disp_low: i8 = new_byte as i8;
                 let signed_disp_low: i16 = disp_low as i16;
-                // let disp_low: i16 = -(!(disp_low as i16) + 1);
-
-                // println!("--- {:04x} {:0x}", address, code);
 
                 code = (code << 8) | new_byte as usize;
 
-                // add immediate register memoryとか
                 ImmediateValue::I16(signed_disp_low, 1)
             }
             _ => {
                 let third_byte = self.consume_u8()?;
                 size += 1;
                 code = (code << 8) | third_byte as usize;
-                // println!("==== {:04x} {:0x}", address, code);
 
                 ImmediateValue::I8(third_byte as i8, 2)
             }
         };
 
-        // "0b07: ffffffffffff9015  mov [0140], ff90"
         let sub_operand = Some(Operand::Immediate(immediate_value));
 
         let instruction = Instruction {
@@ -807,7 +786,6 @@ impl TextParser for VM {
 
     fn reg_either(&mut self, opcode: Opcode) -> Option<Assembly> {
         let address = self.ip;
-        // println!("{:0x}", address);
 
         let mut size = 0;
 
@@ -866,7 +844,6 @@ impl TextParser for VM {
                 size += 2;
                 disp = reverse_order_u16(disp)?;
 
-                let reg = Register::gen(rm, w);
                 let ea = EA::new(rm, (disp as i16) as isize);
 
                 Some(Operand::EffectiveAddress(ea))
@@ -1430,10 +1407,6 @@ impl TextParser for VM {
 
 impl BinaryConsume for VM {
     fn consume_u8(&mut self) -> Option<u8> {
-        // if self.ip >= self.text_size as u16 {
-        //     return None
-        // }
-
         let out = self.ram.read_text(self.ip);
         self.ip += 1;
 
@@ -1446,9 +1419,6 @@ impl BinaryConsume for VM {
 
     fn consume_u32(&mut self) -> Option<u32> {
         let target = (self.consume_u16()? as u32) << 16 | self.consume_u16()? as u32;
-
-        #[cfg(feature = "big_endian")]
-        let target = bin::reverse_order_u32(target)?;
 
         Some(target)
     }
@@ -1466,9 +1436,6 @@ impl BinaryPeek for VM {
 
     fn peek_u32(&mut self) -> Option<u32> {
         let target = (self.peek_u16()? as u32) << 16 | self.peek_u16()? as u32;
-
-        #[cfg(feature = "big_endian")]
-        let target = bin::reverse_order_u32(target)?;
 
         Some(target)
     }
